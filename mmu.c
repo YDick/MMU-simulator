@@ -66,7 +66,6 @@ int clearLeastRecentlyUsedFrame() {
             oldestTime = time;
             oldestFrame = (page_table[i] & PT_FRAME_MASK) >> PT_FRAME_SHIFT;
             LRUindex = i;
-            printf("OLDEST %d\n", oldestFrame);
         }
     }
     page_table[LRUindex] = 0;
@@ -104,7 +103,6 @@ int getFrameFromPageTable(int page){
     if(!(page_table[page] & PT_VALID_MASK)) {
         // pageFault(page);
         frame = getFrameToFill();
-        printf("frame %d time:%d\n", frame, clock);
 
         FILE *fp = bs;
         fseek(fp, page * PAGE_SIZE, SEEK_SET);
