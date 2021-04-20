@@ -20,7 +20,7 @@
 // frame number is last byte in page table entry
 #define PT_FRAME_MASK       0x0000000ff
 #define PT_FRAME_SHIFT      0
-#define PT_VALID_MASK       0x800000000 //4 bytes
+#define PT_VALID_MASK       0x800000000
 #define PT_COUNTER_MASK     0x000ffff00
 #define PT_COUNTER_SHIFT    8
 
@@ -46,7 +46,7 @@ int frame;
 int clock;
 
 
-long int page_table[PAGE_TABLE_SIZE] = {0}; //should be == MEM_SIZE?
+long int page_table[PAGE_TABLE_SIZE] = {0}; 
 int TLB[TLB_SIZE] = {0};
 char phys_mem[PAGE_SIZE * 256] = {0}; //Should def be pagesize*memsize
 
@@ -130,7 +130,6 @@ long int getFrameFromTLB(int page) {
         if(((TLB[i] & TLB_PAGE_MASK) >> TLB_PAGE_SHIFT) == page && TLB[i] & TLB_VALID_MASK){
             frame = TLB[i] & TLB_FRAME_MASK;
             TLB_hit_count+=1;
-            // printf("frame:%d\n", frame);
             flag = true;
             break;
         }
@@ -172,8 +171,6 @@ int main(int argc, char *argv[]) {
     offset = v_addr & V_PAGE_OFFSET_MASK;
     page = (v_addr & V_PAGE_NUM_MASK) >> V_PAGE_NUM_SHIFT;
 
-    // printf("v_addr: %d, pg_num %d, offset: %d\n", v_addr, pg_num, offset);
-
     //first search TLB
     frame = getFrameFromTLB(page);
     // frame = getFrameFromPageTable(page);
@@ -185,7 +182,6 @@ int main(int argc, char *argv[]) {
 
     int phys_addr = ((frame & PT_FRAME_MASK) << 8) | offset;
     int val = phys_mem[phys_addr];
-    // fprintf(outputFile, "%d,%d,%d,%04x,%04x,%04x, %ld\n", v_addr, phys_addr, val, frame,offset,phys_addr , (page_table[page] & PT_COUNTER_MASK) >> PT_COUNTER_SHIFT);
     fprintf(outputFile, "%d,%d,%d\n", v_addr, phys_addr, val);
     addr_count++;
     }
@@ -193,10 +189,6 @@ int main(int argc, char *argv[]) {
     // print stats
     fprintf(outputFile, "Page Faults Rate, %.2lf%%,\n", page_fault_count/addr_count * 100);
     fprintf(outputFile, "TLB Hits Rate, %.2lf%%,", TLB_hit_count/addr_count * 100);
-
-    // for (int i=0; i < TLB_SIZE; i++){
-    //     printf("%04x\n", TLB[i]);
-    // }
 
     return 0;
 }
