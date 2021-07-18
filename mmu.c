@@ -48,7 +48,7 @@ int clock;
 
 long int page_table[PAGE_TABLE_SIZE] = {0}; 
 int TLB[TLB_SIZE] = {0};
-char phys_mem[PAGE_SIZE * 256] = {0}; //Should def be pagesize*memsize
+char phys_mem[PAGE_SIZE * 256] = {0}; //pagesize * smemsize
 
 int TLB_index;
 
